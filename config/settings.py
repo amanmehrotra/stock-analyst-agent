@@ -1,0 +1,3 @@
+import os
+
+NEWS_API_KEY = os.getenv("NEWS_API_KEY", "your_newsapi_key_here")

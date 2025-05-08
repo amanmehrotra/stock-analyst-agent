@@ -1,0 +1,16 @@
+streamlit~=1.45.0
+langchain~=0.3.25
+langchain_openai~=0.3.16
+langchain_community
+langgraph~=0.4.1
+yfinance~=0.2.58
+matplotlib~=3.10.1
+requests~=2.32.3
+feedparser~=6.0.11
+setuptools
+numpy==1.26.3
+langchain-core~=0.3.58
+pandas_ta~=0.3.14b0
+pandas~=2.2.3
+auto-py-to-exe
+pydantic~=2.11.4
