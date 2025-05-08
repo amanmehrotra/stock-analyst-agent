@@ -70,7 +70,7 @@ def start():
 
             result = run_graph(stock_name, trading_type)
             print(f"******************{result}")
-            result_json = result['analysis']
+            result_json = json.loads(result['analysis'])
             st.session_state.result_json = result_json
             st.session_state.result = result
     elif analyze_button is False and st.session_state.result_json is None:
@@ -88,33 +88,33 @@ def start():
         tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Recommendations"])
         with tab2:
             st.markdown("### Chart Indicators")
-            indicators = result_json.indicator_analysis
+            indicators = result_json["indicator_analysis"]
             col1, col2 = st.columns([2, 1])
             with col1:
                 st.image("chart.png", caption="📊 Stock Chart")
             with col2:
                 col3, col4 = st.columns(2)
                 with col3:
-                    st.metric("Close Price", f"₹{indicators.close_price}")
-                    st.metric("SMA 20", f"₹{indicators.SMA_20}")
-                    st.metric("SMA 50", f"₹{indicators.SMA_50}")
-                    st.metric("RSI", f"{indicators.RSI}")
+                    st.metric("Close Price", f"₹{indicators['close_price']}")
+                    st.metric("SMA 20", f"₹{indicators['SMA_20']}")
+                    st.metric("SMA 50", f"₹{indicators['SMA_50']}")
+                    st.metric("RSI", f"{indicators['RSI']}")
                 with col4:
-                    st.metric("MACD", f"{indicators.MACD}")
-                    st.metric("MACD Signal", f"{indicators.MACD_signal}")
-                    st.metric("Bollinger High", f"₹{indicators.bollinger_high_band}")
-                    st.metric("Bollinger Low", f"₹{indicators.bollinger_low_band}")
+                    st.metric("MACD", f"{indicators['MACD']}")
+                    st.metric("MACD Signal", f"{indicators['MACD_signal']}")
+                    st.metric("Bollinger High", f"₹{indicators['bollinger_high_band']}")
+                    st.metric("Bollinger Low", f"₹{indicators['bollinger_low_band']}")
             st.markdown("### Explanation")
             if language == "hindi":
-                st.success(f"{indicators.explanation_hindi}")
+                st.success(f"{indicators['explanation_hindi']}")
             else:
-                st.success(f"{indicators.explanation_english}")
+                st.success(f"{indicators['explanation_english']}")
         with tab1:
             st.markdown("### Latest News")
-            n = result_json.combined_news
+            n = result_json["combined_news"]
             m = {}
             for item in n:
-                m[item.id] = item
+                m[item['id']] = item
             news = result["news"]
             # news = [
             #     {"title": "Indian Bank sees Q4 profit rise", "summary": "भारतीय बैंक का मुनाफा चौथी तिमाही में बढ़ा।"},
@@ -128,9 +128,9 @@ def start():
                 for i in news:
                     item = m[i['id']]
                     if language == "hindi":
-                        label, color = sentiment_color(item.sentiment_hindi)
-                        with st.expander(f"**{item.title_hindi}**"):
-                            st.write(item.summary_hindi)
+                        label, color = sentiment_color(item['sentiment_hindi'])
+                        with st.expander(f"**{item['title_hindi']}**"):
+                            st.write(item['summary_hindi'])
                             st.markdown(f"**भाव:** <span style='color:{color}'>{label}</span>",
                                         unsafe_allow_html=True)
                             st.markdown(f"[पूरा लेख पढ़ें]({i['link']})")
@@ -138,9 +138,9 @@ def start():
                             st.markdown(f"प्रकाशित: {dt.strftime("%b %d, %Y, %I:%M %p")}")
 
                     else:
-                        label, color = sentiment_color(item.sentiment_english)
-                        with st.expander(f"**{item.title_english}**"):
-                            st.write(item.summary_english)
+                        label, color = sentiment_color(item['sentiment_english'])
+                        with st.expander(f"**{item['title_english']}**"):
+                            st.write(item['summary_english'])
                             st.markdown(f"**Sentiment:** <span style='color:{color}'>{label}</span>",
                                         unsafe_allow_html=True)
                             st.markdown(f"[Read article]({i['link']})")
@@ -150,6 +150,6 @@ def start():
             # Final Suggestion
             st.markdown("### Recommendation (AI-based)")
             if language == "hindi":
-                st.success(f"{result_json.final_recommendation_hindi}")
+                st.success(f"{result_json['final_recommendation_hindi']}")
             else:
-                st.success(f"{result_json.final_recommendation_english}")
+                st.success(f"{result_json['final_recommendation_english']}")

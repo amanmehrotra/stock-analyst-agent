@@ -76,5 +76,4 @@ Important: Do NOT include ```json or ``` in the output. Just return raw parsable
 }}
 Only output this JSON. Do not include explanations outside the JSON.
 JSON should be valid and not malformed.
-{format_instructions}
 """

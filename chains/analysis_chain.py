@@ -28,16 +28,15 @@ class LLMService:
         parser = PydanticOutputParser(pydantic_object=StockAnalysisOutput)
 
         prompt = PromptTemplate.from_template(PROMPT)
-        chain = prompt | self.llm | parser
-
+        # chain = prompt | self.llm | parser
+        chain = prompt | self.llm
         feedback = chain.invoke({"stock_name": stock_name,
                                  "news_json": news,
                                  "indicators_json": indicators,
-                                 "trading_type": trading_type,
-                                "format_instructions": parser.get_format_instructions()})
+                                 "trading_type": trading_type})
 
         print(feedback)
-        return feedback
+        return feedback.content
 
 
 # if __name__ == "__main__":
