@@ -32,18 +32,21 @@ Includes:
 
 Your tasks:
 1. Translate `title` and `summary` of each news article into **Hindi**.
-2. If no news is available, return empty list.
-3. Determine the **sentiment** (positive/negative/neutral) of each news article and express it in **Hindi** and **English*.
-4. Explain each chart indicator (SMA, RSI, close_price, etc.) in **Hindi** and **English** with proper punctuation(comma, spaces) and spaces.
-5. Based on both news sentiment and chart indicators, provide a **final recommendation** in Hindi and English.
+2. If no news is available, return an empty list.
+3. Check if each news article is related to **{stock_name}** by analyzing the `title` and `summary`.
+4. Determine the **sentiment** (positive / negative / neutral) of each news article and express it in **Hindi and English**.
+5. Explain each chart indicator (SMA, RSI, close_price, etc.) in **Hindi and English**, with proper punctuation and clarity.
+6. Based on both news sentiment and chart indicators, provide a **final recommendation** in Hindi and English.
 
 The final recommendation should be specific to **{trading_type}** trading and include:
-- Suggestion to **Buy**, **Sell**, **Hold** or **Avoid**.
-- Recommended **entry price**, **target price**, and **stoploss** if applicable.
-- A detailed reasoning behind the suggestion in Hindi and English based on news and technical chart indicators.
-The final recommendation should be clear, properly punctuated sentence string. 
+- Suggestion to **Buy**, **Sell**, **Hold**, or **Avoid**.
+- Recommended **entry price**, **target price**, and **stoploss**, if applicable.
+- A detailed explanation of the reasoning behind the suggestion, in both Hindi and English, based on news and technical chart indicators.
+- Also, provide a clear and actionable trading strategy for the stock based on the combined analysis of news sentiment and technical indicators, in both Hindi and English.
 
-Respond strictly in this **structured JSON format** :
+The final recommendation should be a clear, properly punctuated sentence string.
+
+Respond strictly in this **structured JSON format**:
 Important: Do NOT include ```json or ``` in the output. Just return raw parsable JSON only.
 
 ```json
@@ -55,6 +58,7 @@ Important: Do NOT include ```json or ``` in the output. Just return raw parsable
       "title_english": "...",
       "summary_hindi": "...",
       "summary_english": "...",
+      "is_related_to_stock": "yes / no",
       "sentiment_english": "positive / negative / neutral",
       "sentiment_hindi": "सकारात्मक / नकारात्मक / तटस्थ"
     }}
@@ -74,6 +78,8 @@ Important: Do NOT include ```json or ``` in the output. Just return raw parsable
   "final_recommendation_hindi": "...",
   "final_recommendation_english": "..."
 }}
+
 Only output this JSON. Do not include explanations outside the JSON.
 JSON should be valid and not malformed.
+{format_instructions}
 """

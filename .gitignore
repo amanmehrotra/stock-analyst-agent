@@ -2,3 +2,8 @@
 *.png
 venv/
 build/
+*.pyc
+*.xml
+.idea/
+*.iml
+*.exe

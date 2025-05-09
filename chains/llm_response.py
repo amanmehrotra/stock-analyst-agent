@@ -7,8 +7,9 @@ class NewsItem(BaseModel):
     title_english: str
     summary_hindi: str
     summary_english: str
+    is_related_to_stock: str
     sentiment_english: Literal["positive", "negative", "neutral"]
-    sentiment_hindi: Literal["सकारात्मक", "नकारात्मक", "तटस्थ"]
+    sentiment_hindi: str
 
 class IndicatorAnalysis(BaseModel):
     close_price: str

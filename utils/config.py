@@ -12,5 +12,7 @@ ET_FEEDS = {
 }
 
 # OpenAI variables
-llm_baseurl = "https://openrouter.ai/api/v1"
-llm_key = st.secrets["OPENROUTER_API_KEY"]
+#llm_baseurl = "https://openrouter.ai/api/v1"
+llm_baseurl = "https://api.groq.com/openai/v1"
+llm_key = st.secrets["GROQ_API_KEY"]
+llm_model = "llama3-70b-8192"
