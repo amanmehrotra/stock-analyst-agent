@@ -40,7 +40,7 @@ def start():
     # Sidebar: Stock Selection
     stock_name = st.sidebar.selectbox(
         "Select a Stock",
-        ["Indian Bank", "Adani Power", "PNB","IIFL","POWERGRID",
+        ["Indian Bank", "Adani Power", "PNB","IIFL","JSW Steel","Adani Green","IndusInd Bank","POWERGRID",
          "NTPC", "Ambuja Cement", "ATGL", "AWL Agri Business", "Adani Ports",
          "PAYTM", "Adani Enterprises", "IDEA", "SAIL", "BHEL", "BANK OF BARODA",
          "RVNL","ONGC", "SBI"]
@@ -87,14 +87,15 @@ def start():
     if st.session_state.result_json:
         result_json = st.session_state.result_json
         result = st.session_state.result
-        st.subheader(f"Analysis for: {stock_name}")
+        st.subheader(f"Analysis for: {result['stock_name']}")
         tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
         with tab2:
             st.markdown("### Chart Indicators")
             indicators = result_json.indicator_analysis
             col1, col2 = st.columns([2, 1])
             with col1:
-                st.image("chart.png", caption="📊 Stock Chart")
+                if result['chart_buffer']:
+                    st.image(result['chart_buffer'], caption="📊 Stock Chart")
             with col2:
                 col3, col4 = st.columns(2)
                 with col3:

@@ -1,3 +1,5 @@
+from io import BytesIO
+
 import yfinance as yf
 import matplotlib.pyplot as plt
 import pandas_ta as ta
@@ -37,9 +39,12 @@ class ChartService:
         plt.legend()
 
         # Step 3: Save the chart
-        chart_path = f'chart.png'
-        plt.savefig(chart_path)
-        return data
+        #chart_path = f'chart.png'
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        plt.close()
+        return data, buffer
 
     def calculate_technical_indicators(self, df):
         # Calculate indicators

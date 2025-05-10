@@ -2,6 +2,7 @@ tickers = {
     "Indian Bank": "INDIANB.NS",
     "Adani Enterprises": "ADANIENT.NS",
     "Adani Ports": "ADANIPORTS.NS",
+    "Adani Green": "ADANIGREEN.NS",
     "Adani Power": "ADANIPOWER.NS",
     "Adani Enterprises": "ADANIENT.NS",
     "Apollo Hospitals": "APOLLOHOSP.NS",

@@ -1,4 +1,5 @@
-from typing import TypedDict
+from io import BytesIO
+from typing import TypedDict, Optional
 
 from langgraph.graph import StateGraph, END
 from langgraph_flow.nodes.input_node import input_node
@@ -13,6 +14,7 @@ class StateModel(TypedDict):
     news: list
     indicators: object
     analysis: object
+    chart_buffer: Optional[BytesIO]
 def run_graph(stock_name, trading_type):
     builder = StateGraph(StateModel)
 
