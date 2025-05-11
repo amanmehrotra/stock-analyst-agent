@@ -1,9 +1,7 @@
 import json
-import re
-from json import JSONDecodeError
 
-from json_repair import repair_json
-from langchain_core.messages.tool import tool_call
+from groq import Groq
+from langchain.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
@@ -11,8 +9,8 @@ from chains.llm_response import StockAnalysisOutput
 from chains.prompt import PROMPT
 from chains.translation_prompt import TRANSLATION_SYSTEM_PROMPT
 from utils.config import llm_baseurl, llm_key, llm_model
-from langchain.output_parsers import PydanticOutputParser
-from groq import Groq
+
+
 class LLMService:
     def __init__(self, model_temperature):
         self.url = llm_baseurl
