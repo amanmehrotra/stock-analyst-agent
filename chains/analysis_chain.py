@@ -1,5 +1,6 @@
 import json
 
+import yaml
 from groq import Groq
 from langchain.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
@@ -51,7 +52,7 @@ class LLMService:
             print(f"exception: {e}")
             return None
 
-    def translate_to_hindi(self, translate_request_json):
+    def translate_to_hindi(self, translate_request_yaml):
         # prompt = PromptTemplate.from_template(TRANSLATION_PROMPT)
         # print(f"\n{translate_request_json}")
         # chain = prompt | self.llm
@@ -66,23 +67,43 @@ class LLMService:
         try:
             completion = self.client.chat.completions.create(
                 model=llm_model,
-                response_format= {"type": "json_object"},
                 messages=[
                     {"role": "system", "content": TRANSLATION_SYSTEM_PROMPT},
-                    {"role": "user", "content": f"Translate the json {translate_request_json}"}
+                    {"role": "user", "content": f"Translate the yaml {translate_request_yaml}"}
                 ],
-                temperature = 0.3
+                temperature = 0.4
             )
-
+            print(translate_request_yaml)
             response_content = completion.choices[0].message.content
             print(f"llm translation content: {response_content}\n")
             print(response_content)
-
-            return json.loads(response_content)
+            return validate_translated_yaml(response_content)
         except Exception as e:
             print(f"exception: {e}")
             return None
 
+
+def validate_translated_yaml(yaml_str):
+    try:
+        data = yaml.safe_load(yaml_str)
+
+        # Basic structure validation
+        assert "news" in data and isinstance(data["news"], list), "Missing or invalid 'news'"
+        for item in data["news"]:
+            assert isinstance(item.get("id"), int), "News 'id' must be an integer"
+            assert isinstance(item.get("title"), str), "News 'title' must be a string"
+            assert isinstance(item.get("summary"), str), "News 'summary' must be a string"
+            assert isinstance(item.get("sentiment"), str), "News 'sentiment' must be a string"
+
+        assert isinstance(data.get("indicator_explanation"), str), "Missing or invalid 'indicator_explanation'"
+        assert isinstance(data.get("final_recommendation"), str), "Missing or invalid 'final_recommendation'"
+
+        print("YAML is valid.")
+        return data
+
+    except (yaml.YAMLError, AssertionError) as e:
+        print("Invalid YAML or structure error:", str(e))
+        return None
 
 # if __name__ == "__main__":
 #     news_articles = [
