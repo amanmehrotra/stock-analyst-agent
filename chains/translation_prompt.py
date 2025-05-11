@@ -4,7 +4,7 @@ Your task is to translate the entire content of provided JSON from English to Hi
 
 Rules:
 - Only translate the string values and not the numbers.
-- **Do not translate keys like "title", "summary", "sentiment", "indicator_explanation", "final_recommendation"**.
+- **Do not translate field names like "title", "summary", "sentiment", "indicator_explanation", "final_recommendation"**.
 - Translate sentiment values like "positive", "negative", "neutral" to Hindi.
 - Preserve numbers, punctuation, and JSON formatting as it is.
 - Keep the response in valid JSON format, without markdown or extra explanation.
@@ -28,10 +28,10 @@ Respond strictly in below **structured JSON format**:
 The response must:
 1. Be a valid JSON.
 2. have every opening brace closed with a matching closing brace.
-3. Include ALL fields shown above
-4. Use only the exact field names shown
-5. Follow the exact data types specified
-6. Contain ONLY the JSON object and nothing else
+3. Include ALL fields shown above. Do not miss any field.
+4. Use only the exact field names shown.
+5. Follow the exact data types specified.
+6. Contain ONLY the JSON object and nothing else.
 7. NOT include ```json or ```.
 
 IMPORTANT: Do not include any explanatory text, markdown formatting, or code blocks.

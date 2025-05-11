@@ -52,14 +52,14 @@ def start():
         index=0
     )
 
-    language = st.sidebar.radio("Choose Language", ["hindi", "english"], horizontal=True)
+    language = st.sidebar.radio("Choose Language", ["english"], horizontal=True)
 
     if "result_json" not in st.session_state:
         st.session_state.result_json = None
     if "result" not in st.session_state:
         st.session_state.result = None
-    if "result_json_hindi" not in st.session_state:
-        st.session_state.result_json_hindi = None
+    # if "result_json_hindi" not in st.session_state:
+    #     st.session_state.result_json_hindi = None
     # Fetch Button
     analyze_button = st.sidebar.button("Analyze")
     if analyze_button:
@@ -69,10 +69,10 @@ def start():
 
             result = run_graph(stock_name, trading_type)
             result_json = result['analysis']
-            result_json_hindi = result['analysis_hindi']
-            if result_json is None or result_json_hindi is None:
+            # result_json_hindi = result['analysis_hindi']
+            if result_json is None:
                 st.session_state.result_json = None
-                st.session_state.result_json_hindi = None
+                # st.session_state.result_json_hindi = None
                 if language == "english":
                     st.info('Agent is busy at the moment. Please try again.')
                 elif language == "hindi":
@@ -80,7 +80,7 @@ def start():
 
             st.session_state.result_json = result_json
             st.session_state.result = result
-            st.session_state.result_json_hindi = result_json_hindi
+            # st.session_state.result_json_hindi = result_json_hindi
     elif analyze_button is False and st.session_state.result_json is None:
         if language == "hindi":
             st.info("कृपया एक स्टॉक चुनें और 'Analyze' पर क्लिक करें।")
@@ -89,10 +89,10 @@ def start():
 
 
 
-    if st.session_state.result_json and st.session_state.result_json_hindi:
+    if st.session_state.result_json:
         result_json = st.session_state.result_json
         result = st.session_state.result
-        result_json_hindi = st.session_state.result_json_hindi
+        # result_json_hindi = st.session_state.result_json_hindi
         st.subheader(f"Analysis for: {result['stock_name']}")
         tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
         with tab2:
@@ -115,16 +115,17 @@ def start():
                     st.metric("Bollinger High", f"₹{indicators['bollinger_high_band']}")
                     st.metric("Bollinger Low", f"₹{indicators['bollinger_low_band']}")
             st.markdown("### Explanation")
-            if language == "hindi":
-                st.success(f"{result_json_hindi['indicator_explanation']}")
-            else:
-                st.success(f"{indicators['explanation_english']}")
+            # if language == "hindi":
+            #     st.success(f"{result_json_hindi['indicator_explanation']}")
+            # else:
+            #     st.success(f"{indicators['explanation_english']}")
+            st.success(f"{indicators['explanation_english']}")
         with tab1:
             st.markdown("### Latest News")
-            n = result_json_hindi['news']
+            # n = result_json_hindi['news']
             m = {}
-            for item in n:
-                m[item['id']] = item
+            # for item in n:
+            #     m[item['id']] = item
             news = result["news"]
 
             if not news:
@@ -135,16 +136,17 @@ def start():
             else:
                 for i in news:
                     source = i['source'].split(':')[0]
-                    item = m[i['id']]
+                    # item = m[i['id']]
                     if language == "hindi":
-                        label_en, label_hi, color = sentiment_color(i['sentiment'])
-                        with st.expander(f"📌 **{item['title']} (📰 {source})**"):
-                            st.write(f"📄 {item['summary']}")
-                            st.markdown(f"🧠 **भाव:** <span style='color:{color}'>{label_hi}</span>",
-                                        unsafe_allow_html=True)
-                            st.markdown(f"🔗 [पूरा लेख पढ़ें]({i['link']})")
-                            dt = datetime.strptime(i['publishedAt'], "%Y-%m-%d %H:%M:%S")
-                            st.markdown(f"🕒 प्रकाशित: {dt.strftime("%b %d, %Y, %I:%M %p")}")
+                        pass
+                        # label_en, label_hi, color = sentiment_color(i['sentiment'])
+                        # with st.expander(f"📌 **{item.get('title','')} (📰 {source})**"):
+                        #     st.write(f"📄 {item.get('summary','')}")
+                        #     st.markdown(f"🧠 **भाव:** <span style='color:{color}'>{label_hi}</span>",
+                        #                 unsafe_allow_html=True)
+                        #     st.markdown(f"🔗 [पूरा लेख पढ़ें]({i['link']})")
+                        #     dt = datetime.strptime(i['publishedAt'], "%Y-%m-%d %H:%M:%S")
+                        #     st.markdown(f"🕒 प्रकाशित: {dt.strftime("%b %d, %Y, %I:%M %p")}")
 
                     else:
                         label_en, label_hi, color = sentiment_color(i['sentiment'])
@@ -158,7 +160,8 @@ def start():
         with tab3:
             # Final Suggestion
             st.markdown("### Recommendation (AI-based)")
-            if language == "hindi":
-                st.success(f"{result_json_hindi['final_recommendation']}")
-            else:
-                st.success(f"{result_json['final_recommendation_english']}")
+            # if language == "hindi":
+            #     st.success(f"{result_json_hindi['final_recommendation']}")
+            # else:
+            #     st.success(f"{result_json['final_recommendation_english']}")
+            st.success(f"{result_json['final_recommendation_english']}")

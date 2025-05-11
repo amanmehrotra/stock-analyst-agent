@@ -94,6 +94,8 @@ Important: **Do NOT include ```json or ``` in the output. Just return raw parsab
 
 ⚠️ VERY IMPORTANT:
 - Respond only with valid JSON.
+- Include ALL fields shown above. Do not miss any field.I repeat, Do not miss any field.
+- Use only the exact field names shown.
 - Every opening brace must have a matching closing brace.
 - Ensure all strings use double quotes `"` and key-value pairs are separated by commas.
 - Do NOT include any explanation, introduction, or code block formatting.
