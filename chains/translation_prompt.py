@@ -14,7 +14,7 @@ Respond strictly in below **structured JSON format**:
 {
   "news": [
     {
-      "id": number,
+      "id": "number",
       "title": "string",
       "summary": "string",
       "sentiment": "string"
@@ -24,11 +24,15 @@ Respond strictly in below **structured JSON format**:
     "final_recommendation": "string"
 }
 
+
 The response must:
-1. Include ALL fields shown above
-2. Use only the exact field names shown
-3. Follow the exact data types specified
-4. Contain ONLY the JSON object and nothing else
+1. Be a valid JSON.
+2. have every opening brace closed with a matching closing brace.
+3. Include ALL fields shown above
+4. Use only the exact field names shown
+5. Follow the exact data types specified
+6. Contain ONLY the JSON object and nothing else
+7. NOT include ```json or ```.
 
 IMPORTANT: Do not include any explanatory text, markdown formatting, or code blocks.
 """

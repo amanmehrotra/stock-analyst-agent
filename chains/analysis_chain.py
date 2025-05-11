@@ -35,7 +35,7 @@ class LLMService:
 
         prompt = PromptTemplate.from_template(PROMPT)
         format_instructions = parser.get_format_instructions()
-        print(format_instructions)
+        # print(format_instructions)
         chain = prompt | self.llm
         # chain = prompt | self.llm
         feedback = None
@@ -45,7 +45,7 @@ class LLMService:
                                      "indicators_json": indicators,
                                      "trading_type": trading_type})
 
-            print(f"{feedback}")
+            print(f"llm analysis content:{feedback}\n")
             return json.loads(feedback.content)
         except Exception as e:
             print(f"exception: {e}")
@@ -75,7 +75,7 @@ class LLMService:
             )
 
             response_content = completion.choices[0].message.content
-            print("Raw response:")
+            print(f"llm translation content: {response_content}\n")
             print(response_content)
 
             return json.loads(response_content)

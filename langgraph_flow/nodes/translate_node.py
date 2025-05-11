@@ -45,5 +45,5 @@ def translate_node(state):
     #print(translate_request_json)
     llm_service = LLMService(model_temperature=0.4)
     analysis_hindi = llm_service.translate_to_hindi(translate_request_json)
-    #print(analysis_hindi)
+    print(analysis_hindi)
     return {**state, "news":full_news_list ,"analysis_hindi": analysis_hindi}
