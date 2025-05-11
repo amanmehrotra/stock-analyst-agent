@@ -14,6 +14,7 @@ class StateModel(TypedDict):
     news: list
     indicators: object
     analysis: object
+    analysis_hindi: object
     chart_buffer: Optional[BytesIO]
 def run_graph(stock_name, trading_type):
     builder = StateGraph(StateModel)
@@ -22,14 +23,14 @@ def run_graph(stock_name, trading_type):
     builder.add_node("fetch_news", fetch_news_node)
     builder.add_node("fetch_chart", fetch_chart_node)
     builder.add_node("analyze", analyze_node)
-    # builder.add_node("translate", translate_node)
+    builder.add_node("translate", translate_node)
 
     builder.set_entry_point("input")
     builder.add_edge("input", "fetch_news")
     builder.add_edge("fetch_news", "fetch_chart")
     builder.add_edge("fetch_chart", "analyze")
-    # builder.add_edge("analyze", "translate")
-    builder.add_edge("analyze", END)
+    builder.add_edge("analyze", "translate")
+    builder.add_edge("translate", END)
 
     graph = builder.compile()
     return graph.invoke({"stock_name": stock_name, "trading_type": trading_type})

@@ -58,6 +58,8 @@ def start():
         st.session_state.result_json = None
     if "result" not in st.session_state:
         st.session_state.result = None
+    if "result_json_hindi" not in st.session_state:
+        st.session_state.result_json_hindi = None
     # Fetch Button
     analyze_button = st.sidebar.button("Analyze")
     if analyze_button:
@@ -67,8 +69,10 @@ def start():
 
             result = run_graph(stock_name, trading_type)
             result_json = result['analysis']
-            if result_json is None:
+            result_json_hindi = result['analysis_hindi']
+            if result_json is None or result_json_hindi is None:
                 st.session_state.result_json = None
+                st.session_state.result_json_hindi = None
                 if language == "english":
                     st.info('Agent is busy at the moment. Please try again.')
                 elif language == "hindi":
@@ -76,6 +80,7 @@ def start():
 
             st.session_state.result_json = result_json
             st.session_state.result = result
+            st.session_state.result_json_hindi = result_json_hindi
     elif analyze_button is False and st.session_state.result_json is None:
         if language == "hindi":
             st.info("कृपया एक स्टॉक चुनें और 'Analyze' पर क्लिक करें।")
@@ -84,14 +89,15 @@ def start():
 
 
 
-    if st.session_state.result_json:
+    if st.session_state.result_json and st.session_state.result_json_hindi:
         result_json = st.session_state.result_json
         result = st.session_state.result
+        result_json_hindi = st.session_state.result_json_hindi
         st.subheader(f"Analysis for: {result['stock_name']}")
         tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
         with tab2:
             st.markdown("### Chart Indicators")
-            indicators = result_json.indicator_analysis
+            indicators = result_json['indicator_analysis']
             col1, col2 = st.columns([2, 1])
             with col1:
                 if result['chart_buffer']:
@@ -99,65 +105,60 @@ def start():
             with col2:
                 col3, col4 = st.columns(2)
                 with col3:
-                    st.metric("Close Price", f"₹{indicators.close_price}")
-                    st.metric("SMA 20", f"₹{indicators.SMA_20}")
-                    st.metric("SMA 50", f"₹{indicators.SMA_50}")
-                    st.metric("RSI", f"{indicators.RSI}")
+                    st.metric("Close Price", f"₹{indicators['close_price']}")
+                    st.metric("SMA 20", f"₹{indicators['SMA_20']}")
+                    st.metric("SMA 50", f"₹{indicators['SMA_50']}")
+                    st.metric("RSI", f"{indicators['RSI']}")
                 with col4:
-                    st.metric("MACD", f"{indicators.MACD}")
-                    st.metric("MACD Signal", f"{indicators.MACD_signal}")
-                    st.metric("Bollinger High", f"₹{indicators.bollinger_high_band}")
-                    st.metric("Bollinger Low", f"₹{indicators.bollinger_low_band}")
+                    st.metric("MACD", f"{indicators['MACD']}")
+                    st.metric("MACD Signal", f"{indicators['MACD_signal']}")
+                    st.metric("Bollinger High", f"₹{indicators['bollinger_high_band']}")
+                    st.metric("Bollinger Low", f"₹{indicators['bollinger_low_band']}")
             st.markdown("### Explanation")
             if language == "hindi":
-                st.success(f"{indicators.explanation_hindi}")
+                st.success(f"{result_json_hindi['indicator_explanation']}")
             else:
-                st.success(f"{indicators.explanation_english}")
+                st.success(f"{indicators['explanation_english']}")
         with tab1:
             st.markdown("### Latest News")
-            n = result_json.combined_news
+            n = result_json_hindi['news']
             m = {}
             for item in n:
-                m[item.id] = item
+                m[item['id']] = item
             news = result["news"]
-            # news = [
-            #     {"title": "Indian Bank sees Q4 profit rise", "summary": "भारतीय बैंक का मुनाफा चौथी तिमाही में बढ़ा।"},
-            #     {"title": "Indian Bank partners with NPCI", "summary": "भारतीय बैंक ने NPCI के साथ साझेदारी की।"},
-            #     {"title": "Stock movement alert", "summary": "भारतीय बैंक के शेयर में उतार-चढ़ाव देखा गया।"},
-            # ]
-            # print(news)
+
             if not news:
-                st.warning("News not available")
+                if language == 'hindi':
+                    st.warning("अभी कोई समाचार उपलब्ध नहीं है।")
+                else:
+                    st.warning("No news currently available!")
             else:
                 for i in news:
-                    if i['id'] not in m:
-                        continue
+                    source = i['source'].split(':')[0]
                     item = m[i['id']]
-                    if item.is_related_to_stock == 'no':
-                        continue
                     if language == "hindi":
-                        label_en, label_hi, color = sentiment_color(item.sentiment_english)
-                        with st.expander(f"**{item.title_hindi}**"):
-                            st.write(item.summary_hindi)
-                            st.markdown(f"**भाव:** <span style='color:{color}'>{label_hi}</span>",
+                        label_en, label_hi, color = sentiment_color(i['sentiment'])
+                        with st.expander(f"📌 **{item['title']} (📰 {source})**"):
+                            st.write(f"📄 {item['summary']}")
+                            st.markdown(f"🧠 **भाव:** <span style='color:{color}'>{label_hi}</span>",
                                         unsafe_allow_html=True)
-                            st.markdown(f"[पूरा लेख पढ़ें]({i['link']})")
+                            st.markdown(f"🔗 [पूरा लेख पढ़ें]({i['link']})")
                             dt = datetime.strptime(i['publishedAt'], "%Y-%m-%d %H:%M:%S")
-                            st.markdown(f"प्रकाशित: {dt.strftime("%b %d, %Y, %I:%M %p")}")
+                            st.markdown(f"🕒 प्रकाशित: {dt.strftime("%b %d, %Y, %I:%M %p")}")
 
                     else:
-                        label_en, label_hi, color = sentiment_color(item.sentiment_english)
-                        with st.expander(f"**{item.title_english}**"):
-                            st.write(item.summary_english)
-                            st.markdown(f"**Sentiment:** <span style='color:{color}'>{label_en}</span>",
+                        label_en, label_hi, color = sentiment_color(i['sentiment'])
+                        with st.expander(f"📌 **{i['title']} (📰 {source})**"):
+                            st.write(f"📄 {i['summary']}")
+                            st.markdown(f"🧠 **Sentiment:** <span style='color:{color}'>{label_en}</span>",
                                         unsafe_allow_html=True)
-                            st.markdown(f"[Read article]({i['link']})")
+                            st.markdown(f"🔗 [Read article]({i['link']})")
                             dt = datetime.strptime(i['publishedAt'], "%Y-%m-%d %H:%M:%S")
-                            st.markdown(f"Published on {dt.strftime("%b %d, %Y, %I:%M %p")}")
+                            st.markdown(f"🕒 Published on {dt.strftime("%b %d, %Y, %I:%M %p")}")
         with tab3:
             # Final Suggestion
             st.markdown("### Recommendation (AI-based)")
             if language == "hindi":
-                st.success(f"{result_json.final_recommendation_hindi}")
+                st.success(f"{result_json_hindi['final_recommendation']}")
             else:
-                st.success(f"{result_json.final_recommendation_english}")
+                st.success(f"{result_json['final_recommendation_english']}")

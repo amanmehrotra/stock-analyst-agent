@@ -3,12 +3,23 @@ import streamlit as st
 
 #ET Feeds URL
 ET_FEEDS = {
-    "Top News": "https://economictimes.indiatimes.com/rssfeedsdefault.cms",
-    "Markets": "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms",
-    "Stock Market": "https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms",
-    "Banking/Finance": "https://economictimes.indiatimes.com/industry/banking/finance/rssfeeds/13358259.cms",
-    "Economy": "https://economictimes.indiatimes.com/news/economy/rssfeeds/137338068.cms",
-    "Industry": "https://economictimes.indiatimes.com/industry/rssfeeds/13352306.cms"
+    "The Economic Times:Markets": "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms",
+    "The Economic Times:Stock Market": "https://economictimes.indiatimes.com/markets/stocks/rssfeeds/2146842.cms",
+    "The Economic Times:Banking-Finance": "https://economictimes.indiatimes.com/industry/banking/finance/rssfeeds/13358259.cms",
+    "The Economic Times:Economy": "https://economictimes.indiatimes.com/news/economy/rssfeeds/137338068.cms",
+    "The Economic Times:Industry": "https://economictimes.indiatimes.com/industry/rssfeeds/13352306.cms",
+
+    "Business-Standard:Latest News": "https://www.business-standard.com/rss/latest.rss",
+    "Business-Standard:business-Markets": "https://www.business-standard.com/rss/markets-106.rss",
+    "Business-Standard:business-Economy": "https://www.business-standard.com/rss/economy-102.rss",
+    "Business-Standard:business-Industry": "https://www.business-standard.com/rss/industry-217.rss",
+    "Business-Standard:Finance": "https://www.business-standard.com/rss/finance-103.rss",
+    "Business-Standard:Companies": "https://www.business-standard.com/rss/companies-101.rss",
+    "Business-Standard:Companies-news": "https://www.business-standard.com/rss/companies/news-10101.rss",
+    "Business-Standard:Stock-market-news": "https://www.business-standard.com/rss/markets/stock-market-news-10618.rss",
+    "Business-Standard:Market-news": "https://www.business-standard.com/rss/markets/news-10601.rss",
+    "Business-Standard:Finance-news": "https://www.business-standard.com/rss/finance/news-10301.rss",
+    "Business-Standard:Economy-news": "https://www.business-standard.com/rss/economy/news-10201.rss"
 }
 
 # OpenAI variables
