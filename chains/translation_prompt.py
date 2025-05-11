@@ -17,6 +17,10 @@ news:
     title: string
     summary: string
     sentiment: string
+  - id: number
+    title: string
+    summary: string
+    sentiment: string
 indicator_explanation: string
 final_recommendation: string
 
