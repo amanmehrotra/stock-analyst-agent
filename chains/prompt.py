@@ -43,7 +43,7 @@ Includes:
    - For Bollinger Bands, check if the current close is near the upper/lower band and explain what that usually means (e.g., resistance or support).
    - Do not just state values — always combine the definition + current reading + what it suggests.
    - Format it as a readable paragraph in natural English, similar to how a human analyst would explain it to a beginner investor.
-   - **All these details should be part of the `explanation_english` field**.
+   - **All these details should be part of the `indicator_explanation_english` field**.
    
 6. Based on **news sentiment and chart analysis**, give a final trading recommendation specifically for **{trading_type}** trading. Include:
    - A clear and concise suggestion: **Buy / Sell / Hold / Avoid**
@@ -65,36 +65,24 @@ Important: **Do NOT include ```json or ``` in the output. Just return raw parsab
     {{
       "id": 1,
       "title_english": "Tata Motors reports 23% rise in quarterly profit",
-      "summary_english": "The company posted higher quarterly earnings, boosting investor confidence and indicating strong future growth.",
       "is_related_to_stock": "yes/no",
       "sentiment_english": "positive"
     }},
     {{
       "id": 2,
       "title_english": "Tata Motors reports 23% rise in quarterly profit",
-      "summary_english": "The company posted higher quarterly earnings, boosting investor confidence and indicating strong future growth.",
       "is_related_to_stock": "yes/no",
       "sentiment_english": "positive"
     }}
   ],
-  "indicator_analysis": {{
-    "close_price": "94.25",
-    "SMA_20": "95.2",
-    "SMA_50": "96.01",
-    "RSI": "41.55",
-    "MACD": "-0.57",
-    "MACD_signal": "-0.54",
-    "bollinger_low_band": "97.23",
-    "bollinger_high_band": "93.18",
-    "explanation_english": "..."
-  }},
+  "indicator_explanation_english": "...",
   "final_recommendation_english": "..."
 }}
 
 
 ⚠️ VERY IMPORTANT:
 - Respond only with valid JSON.
-- Include ALL fields shown above. Do not miss any field.I repeat, Do not miss any field.
+- Include ALL fields shown above. Do not miss any field.
 - Use only the exact field names shown.
 - Every opening brace must have a matching closing brace.
 - Ensure all strings use double quotes `"` and key-value pairs are separated by commas.

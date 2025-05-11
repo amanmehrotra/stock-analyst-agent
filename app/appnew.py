@@ -97,7 +97,8 @@ def start():
         tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
         with tab2:
             st.markdown("### Chart Indicators")
-            indicators = result_json['indicator_analysis']
+            indicator_explanation = result_json.get('indicator_explanation_english','')
+            indicators_org = result['indicators']
             col1, col2 = st.columns([2, 1])
             with col1:
                 if result['chart_buffer']:
@@ -105,21 +106,21 @@ def start():
             with col2:
                 col3, col4 = st.columns(2)
                 with col3:
-                    st.metric("Close Price", f"₹{indicators['close_price']}")
-                    st.metric("SMA 20", f"₹{indicators['SMA_20']}")
-                    st.metric("SMA 50", f"₹{indicators['SMA_50']}")
-                    st.metric("RSI", f"{indicators['RSI']}")
+                    st.metric("Close Price", f"₹{indicators_org['close_price']}")
+                    st.metric("SMA 20", f"₹{indicators_org['SMA_20']}")
+                    st.metric("SMA 50", f"₹{indicators_org['SMA_50']}")
+                    st.metric("RSI", f"{indicators_org['RSI']}")
                 with col4:
-                    st.metric("MACD", f"{indicators['MACD']}")
-                    st.metric("MACD Signal", f"{indicators['MACD_signal']}")
-                    st.metric("Bollinger High", f"₹{indicators['bollinger_high_band']}")
-                    st.metric("Bollinger Low", f"₹{indicators['bollinger_low_band']}")
+                    st.metric("MACD", f"{indicators_org['MACD']}")
+                    st.metric("MACD Signal", f"{indicators_org['MACD_signal']}")
+                    st.metric("Bollinger High", f"₹{indicators_org['bollinger_high_band']}")
+                    st.metric("Bollinger Low", f"₹{indicators_org['bollinger_low_band']}")
             st.markdown("### Explanation")
             # if language == "hindi":
             #     st.success(f"{result_json_hindi['indicator_explanation']}")
             # else:
             #     st.success(f"{indicators['explanation_english']}")
-            st.success(f"{indicators['explanation_english']}")
+            st.success(f"{indicator_explanation}")
         with tab1:
             st.markdown("### Latest News")
             # n = result_json_hindi['news']
@@ -164,4 +165,4 @@ def start():
             #     st.success(f"{result_json_hindi['final_recommendation']}")
             # else:
             #     st.success(f"{result_json['final_recommendation_english']}")
-            st.success(f"{result_json['final_recommendation_english']}")
+            st.success(f"{result_json.get('final_recommendation_english','')}")
