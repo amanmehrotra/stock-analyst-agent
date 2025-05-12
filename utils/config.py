@@ -13,7 +13,7 @@ ET_FEEDS = {
     # "Business-Standard:business-Industry": "https://www.business-standard.com/rss/industry-217.rss",
     # "Business-Standard:Finance": "https://www.business-standard.com/rss/finance-103.rss",
     # "Business-Standard:Companies": "https://www.business-standard.com/rss/companies-101.rss",
-    # "Business-Standard:Companies-news": "https://www.business-standard.com/rss/companies/news-10101.rss",
+    "Business-Standard:Companies-news": "https://www.business-standard.com/rss/companies/news-10101.rss",
     # "Business-Standard:Stock-market-news": "https://www.business-standard.com/rss/markets/stock-market-news-10618.rss",
     # "Business-Standard:Market-news": "https://www.business-standard.com/rss/markets/news-10601.rss",
     # "Business-Standard:Finance-news": "https://www.business-standard.com/rss/finance/news-10301.rss",
