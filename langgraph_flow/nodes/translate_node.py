@@ -4,6 +4,8 @@ from datetime import datetime
 import yaml
 
 from chains.analysis_chain import LLMService
+from services import translator_service
+
 
 class TranslateRequest:
     def __init__(self):
@@ -25,8 +27,8 @@ def translate_node(state):
 
     llm_news = state["analysis"]["combined_news"]
     llm_news_map = {}
-    for n in llm_news:
-        llm_news_map[n['id']] = (n["sentiment_english"],n["is_related_to_stock"])
+    for item in llm_news:
+        llm_news_map[item['id']] = (item["sentiment_english"],item["is_related_to_stock"])
     full_news_list = []
     for record in state["news"]:
         # print(f"{record}***")
@@ -45,11 +47,12 @@ def translate_node(state):
     translate_request.indicator_explanation = state["analysis"].get("indicator_explanation_english",'')
     translate_request.final_recommendation = state["analysis"].get('final_recommendation_english','')
     # print(full_news_list)
-    translate_request_yaml = yaml.dump(translate_request.to_dict(), sort_keys=False, allow_unicode=True)
+    # translate_request_yaml = yaml.dump(translate_request.to_dict(), sort_keys=False, allow_unicode=True)
+    # translate_request_json = json.dumps(translate_request.to_dict())
     #print(translate_request_json)
-    llm_service = LLMService(model_temperature=0.4)
-    analysis_hindi = llm_service.translate_to_hindi(translate_request_yaml)
-    print(analysis_hindi)
+    # llm_service = LLMService(model_temperature=0.3)
+    # analysis_hindi = llm_service.translate_to_hindi(translate_request_json)
+    # print(analysis_hindi)
     # print(full_news_list)
     # Sort by 'publishedAt' in descending order
     full_news_list = sorted(
@@ -57,4 +60,6 @@ def translate_node(state):
         key=lambda x: datetime.strptime(x['publishedAt'], '%Y-%m-%d %H:%M:%S'),
         reverse=True
     )
+
+    analysis_hindi = translator_service.initiate_translation(translate_request.to_dict())
     return {**state, "news":full_news_list, "analysis_hindi": analysis_hindi}

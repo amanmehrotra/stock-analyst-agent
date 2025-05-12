@@ -32,7 +32,7 @@ Includes:
 
 ### Your tasks:
 1. If no news is available, return an empty list for the "combined_news".
-2. **Check if the news is actually related** to the stock using its `title` and `summary`. If it’s related, mark `is_related_to_stock` as "yes" otherwise "no".
+2. **Check if the news is actually about** the stock {stock_name} using its `title` and `summary`. If it is about {stock_name}, mark `is_related_to_stock` as "yes" otherwise "no".
 3. Determine **sentiment** of each related news item (positive / negative / neutral).
 5. **Explain each technical indicator** in simple English, step-by-step. Use beginner-friendly explanations:
    - What is SMA, RSI, MACD, Bollinger Bands? First define each indicator simply.
