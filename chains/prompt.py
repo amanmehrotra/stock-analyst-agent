@@ -1,4 +1,4 @@
-PROMPT = """You are a professional stock analyst.
+PROMPT = """You are a professional stock market analyst.
 
 Analyze the following for the stock: {stock_name}
 
@@ -33,8 +33,16 @@ Includes:
 ### Your tasks:
 1. If no news is available, return an empty list for the "combined_news".
 2. **Check if the news is actually about** the stock {stock_name} using its `title` and `summary`. If it is about {stock_name}, mark `is_related_to_stock` as "yes" otherwise "no".
-3. Determine **sentiment** of each related news item (positive / negative / neutral).
-5. **Explain each technical indicator** in simple English, step-by-step. Use beginner-friendly explanations:
+3. Determine **sentiment** of each related news `title` and `summary` (positive / negative / neutral).
+   - Think like a smart market analyst who understands how investors interpret this news.
+   - Consider the **potential market impact** of the news.
+   - Focus on **investor sentiment** and whether the news might **encourage buying or selling**.
+   - For **stake sales**, especially by large investors (e.g. SoftBank, promoters), consider whether the sale price is above or below the current market price. A **stake sale often signals investor confidence or lack thereof**.
+   - If there are **significant market implications** (e.g., a large investor exiting, selling below market value, or a negative association), it’s likely **negative**.
+   - **Neutral** is acceptable **only if** the news is purely informational or unlikely to have a direct impact on stock performance or sentiment.
+   - Use reasoning to judge whether the market or investor would interpret the news positively, negatively or neutrally.
+   - Focus on **investor sentiment** and whether the news might **encourage buying or selling**.
+4. **Explain each technical indicator** in simple English, step-by-step. Use beginner-friendly explanations:
    - What is SMA, RSI, MACD, Bollinger Bands? First define each indicator simply.
    - Then, explain what each indicator's current value means in the context of {stock_name}.
    - For SMA trend, is price above or below SMA_20 and SMA_50? What does it indicate?
@@ -44,14 +52,13 @@ Includes:
    - Do not just state values — always combine the definition + current reading + what it suggests.
    - Format it as a readable paragraph in natural English, similar to how a human analyst would explain it to a beginner investor.
    - **All these details should be part of the `indicator_explanation_english` field**.
-   
-6. Based on **news sentiment and chart analysis**, give a final trading recommendation specifically for **{trading_type}** trading. Include:
+5. Based on **news sentiment and chart analysis**, give a final trading recommendation specifically for **{trading_type}** trading. Include:
    - A clear and concise suggestion: **Buy / Sell / Hold / Avoid**
    - Entry price, target price, stoploss (if applicable)
    - A practical, actionable trading strategy suitable for the given trading type (e.g., intraday, short-term)
    - **Explanation:** Use chain-of-thought reasoning. Step-by-step, explain how each technical indicator (trend, support/resistance, momentum) and the overall news sentiment contribute to the recommendation.
    - Present this explanation in natural, beginner-friendly English. Don't use technical jargon without explaining it.
-   - Detailed reasoning in English based on indicators and news
+   - Detailed reasoning in English based on indicators and news.
    - Tie it back to {stock_name}'s current indicator values and the specific trading type.
    - Format it as a readable paragraph in natural English, similar to how a human analyst would explain it to a beginner investor.
    - **All this must go inside the `final_recommendation_english` field** as a clear, grammatically correct paragraph.

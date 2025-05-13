@@ -43,7 +43,7 @@ def start():
         ["Indian Bank", "Adani Power", "PNB","IIFL","JSW Steel","Adani Green","IndusInd Bank","POWERGRID",
          "NTPC", "Ambuja Cement", "ATGL", "AWL Agri Business", "Adani Ports",
          "PAYTM", "Adani Enterprises", "IDEA", "SAIL", "BHEL", "BANK OF BARODA",
-         "RVNL","ONGC", "SBI"]
+         "RVNL","ONGC", "SBI", "Hindalco"]
     )
 
     trading_type = st.sidebar.selectbox(
