@@ -48,7 +48,7 @@ Includes:
 4. **Explain each technical indicator** in simple English, step-by-step. Use beginner-friendly explanations:
    - What is EMA, RSI, MACD, OBV, Bollinger Bands, ADX, and CCI? First define each indicator simply.
    - Then, explain what each indicator's current value means in the context of {stock_name}.
-   - For EMA, is price above or below EMA_20 and EMA_50? What does it indicate about short- or medium-term trend?
+   - For EMA, is price above or below EMA_20 and EMA_50? What does it indicate about {trading_type} trend?
    - For RSI, interpret whether the value indicates overbought (e.g., 80), oversold (e.g., 20), or neutral (e.g., 40–60), and what that suggests for traders.
    - For MACD, explain whether it is above/below the signal line and what that means. Also interpret the direction (is MACD increasing or decreasing).
    - For OBV, explain whether it is rising or falling and what that tells us about buying/selling pressure.
@@ -61,7 +61,7 @@ Includes:
 5. Based on **news sentiment and chart analysis**, give a final trading recommendation specifically for **{trading_type}** trading. Include:
    - A clear and concise suggestion: **Buy / Sell / Hold / Avoid**
    - Entry price, target price, stoploss (if applicable)
-   - A practical, actionable trading strategy suitable for the given trading type (e.g., intraday, short-term)
+   - A practical, actionable trading strategy suitable for the given trading type {trading_type}
    - **Explanation:** Use chain-of-thought reasoning. Step-by-step, explain how each technical indicator (trend, support/resistance, momentum) and the overall news sentiment contribute to the recommendation.
    - Present this explanation in natural, beginner-friendly English. Don't use technical jargon without explaining it.
    - Detailed reasoning in English based on indicators and news.
