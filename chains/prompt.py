@@ -22,13 +22,16 @@ Each item includes:
 
 Includes:
 - `close_price`
-- `SMA_20`
-- `SMA_50`
+- `EMA_20`
+- `EMA_50`
 - `RSI`
 - `MACD`
 - `MACD_signal`
+- `OBV`
 - `bollinger_low_band`
 - `bollinger_high_band`
+- `ADX`
+- `CCI`
 
 ### Your tasks:
 1. If no news is available, return an empty list for the "combined_news".
@@ -43,12 +46,15 @@ Includes:
    - Use reasoning to judge whether the market or investor would interpret the news positively, negatively or neutrally.
    - Focus on **investor sentiment** and whether the news might **encourage buying or selling**.
 4. **Explain each technical indicator** in simple English, step-by-step. Use beginner-friendly explanations:
-   - What is SMA, RSI, MACD, Bollinger Bands? First define each indicator simply.
+   - What is EMA, RSI, MACD, OBV, Bollinger Bands, ADX, and CCI? First define each indicator simply.
    - Then, explain what each indicator's current value means in the context of {stock_name}.
-   - For SMA trend, is price above or below SMA_20 and SMA_50? What does it indicate?
+   - For EMA, is price above or below EMA_20 and EMA_50? What does it indicate about short- or medium-term trend?
    - For RSI, interpret whether the value indicates overbought (e.g., 80), oversold (e.g., 20), or neutral (e.g., 40–60), and what that suggests for traders.
    - For MACD, explain whether it is above/below the signal line and what that means. Also interpret the direction (is MACD increasing or decreasing).
+   - For OBV, explain whether it is rising or falling and what that tells us about buying/selling pressure.
    - For Bollinger Bands, check if the current close is near the upper/lower band and explain what that usually means (e.g., resistance or support).
+   - For ADX, interpret whether the trend strength is weak (<20), moderate (20-40), or strong (>40).
+   - For CCI, interpret whether it shows overbought (>100), oversold (<-100), or neutral conditions.
    - Do not just state values — always combine the definition + current reading + what it suggests.
    - Format it as a readable paragraph in natural English, similar to how a human analyst would explain it to a beginner investor.
    - **All these details should be part of the `indicator_explanation_english` field**.

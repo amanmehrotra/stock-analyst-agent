@@ -1,9 +1,11 @@
-import json
+import tempfile
 from datetime import datetime
 
 import streamlit as st
+from gtts import gTTS
 
 from langgraph_flow.graph_builder import run_graph
+
 
 def sentiment_color(sentiment):
     sentiment_display = {
@@ -40,15 +42,16 @@ def start():
     # Sidebar: Stock Selection
     stock_name = st.sidebar.selectbox(
         "Select a Stock",
-        ["Indian Bank", "Adani Power", "PNB","IIFL","JSW Steel","Adani Green","IndusInd Bank","POWERGRID",
+         ["Indian Bank", "Adani Power", "PNB","IIFL","JSW Steel","Adani Green","IndusInd Bank","POWERGRID",
          "NTPC", "Ambuja Cement", "ATGL", "AWL Agri Business", "Adani Ports",
          "PAYTM", "Adani Enterprises", "IDEA", "SAIL", "BHEL", "BANK OF BARODA",
-         "RVNL","ONGC", "SBI", "Hindalco"]
+         "RVNL","ONGC", "SBI", "Hindalco", "BEL", "Canara Bank", "Coal India", "Indian Oil", "Indian Oil Finance",
+         "NBCC", "IRCON", "Reliance", "Renuka", "RAILTEL", "LIC"]
     )
 
     trading_type = st.sidebar.selectbox(
         "Select Trading Type",
-        ["Intraday", "Short-term"],
+        ["Intraday", "1-3 Days", "1-2 Weeks", "2-4 Weeks","1-3 Months","3-6 Months"],
         index=0
     )
 
@@ -106,18 +109,34 @@ def start():
             with col2:
                 col3, col4 = st.columns(2)
                 with col3:
-                    st.metric("Close Price", f"₹{indicators_org['close_price']}")
-                    st.metric("SMA 20", f"₹{indicators_org['SMA_20']}")
-                    st.metric("SMA 50", f"₹{indicators_org['SMA_50']}")
-                    st.metric("RSI", f"{indicators_org['RSI']}")
+                    if "close_price" in indicators_org:
+                        st.metric("Close Price", f"₹{indicators_org['close_price']}")
+                    if "EMA_20" in indicators_org:
+                        st.metric("EMA 20", f"₹{indicators_org['EMA_20']}")
+                    if "EMA_50" in indicators_org:
+                        st.metric("EMA 50", f"₹{indicators_org['EMA_50']}")
+                    if "RSI" in indicators_org:
+                        st.metric("RSI", f"{indicators_org['RSI']}")
+                    if "OBV" in indicators_org:
+                        st.metric("OBV", f"{indicators_org['OBV']}")
+                    if "ADX" in indicators_org:
+                        st.metric("ADX", f"{indicators_org['ADX']}")
+
                 with col4:
-                    st.metric("MACD", f"{indicators_org['MACD']}")
-                    st.metric("MACD Signal", f"{indicators_org['MACD_signal']}")
-                    st.metric("Bollinger High", f"₹{indicators_org['bollinger_high_band']}")
-                    st.metric("Bollinger Low", f"₹{indicators_org['bollinger_low_band']}")
+                    if "MACD" in indicators_org:
+                        st.metric("MACD", f"{indicators_org['MACD']}")
+                    if "MACD_signal" in indicators_org:
+                        st.metric("MACD Signal", f"{indicators_org['MACD_signal']}")
+                    if "bollinger_high_band" in indicators_org:
+                        st.metric("Bollinger High", f"₹{indicators_org['bollinger_high_band']}")
+                    if "bollinger_low_band" in indicators_org:
+                        st.metric("Bollinger Low", f"₹{indicators_org['bollinger_low_band']}")
+                    if "CCI" in indicators_org:
+                        st.metric("CCI", f"{indicators_org['CCI']}")
             st.markdown("### Explanation")
             if language == "hindi":
                 st.success(f"{result_json_hindi.get('indicator_explanation', '')}")
+
             else:
                 st.success(f"{indicator_explanation}")
         with tab1:
@@ -161,6 +180,14 @@ def start():
             # Final Suggestion
             st.markdown("### Recommendation (AI-based)")
             if language == "hindi":
-                st.success(f"{result_json_hindi.get('final_recommendation','')}")
+                recommendation = result_json_hindi.get('final_recommendation','')
+                st.success(f"{recommendation}")
             else:
                 st.success(f"{result_json.get('final_recommendation_english','')}")
+
+def text_to_speech(text, lang):
+    tts = gTTS(text=text, lang=lang)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmpfile:
+        tts.save(tmpfile.name)
+        return tmpfile.name
+

@@ -63,5 +63,16 @@ tickers = {
     "Titan Company": "TITAN.NS",
     "UPL": "UPL.NS",
     "UltraTech Cement": "ULTRACEMCO.NS",
-    "Wipro": "WIPRO.NS"
+    "Wipro": "WIPRO.NS",
+    "BEL": "BEL.NS",  # Bharat Electronics Limited
+    "Canara Bank": "CANBK.NS",
+    "Coal India": "COALINDIA.NS",
+    "Indian Oil": "IOC.NS",  # Indian Oil Corporation Limited
+    "Indian Oil Finance": "IRFC.NS",  # Indian Railway Finance Corporation Limited
+    "NBCC": "NBCC.NS",  # NBCC (India) Limited
+    "IRCON": "IRCON.NS",  # Ircon International Limited
+    "Reliance": "RELIANCE.NS",  # Reliance Industries Limited
+    "Renuka": "RENUKA.NS",  # Shree Renuka Sugars Limited
+    "RAILTEL": "RAILTEL.NS",  # RailTel Corporation of India Limited
+    "LIC": "LICI.NS"  # Life Insurance Corporation of India
 }
