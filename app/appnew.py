@@ -180,10 +180,34 @@ def start():
             # Final Suggestion
             st.markdown("### Recommendation (AI-based)")
             if language == "hindi":
+                st.success(f"{result_json_hindi.get('indicator_explanation', '')}")
                 recommendation = result_json_hindi.get('final_recommendation','')
                 st.success(f"{recommendation}")
+                # st.markdown("Final Recommendation:-")
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.info(f"**Strategy:** {result_json.get('trade_plan').get('strategy','')}")
+                with col2:
+                    st.info(f"**Entry Price:** {result_json.get('trade_plan').get('entry_price', '')}")
+                with col3:
+                    st.info(f"**Target Price:** {result_json.get('trade_plan').get('target_price', '')}")
+                with col4:
+                    st.info(f"**Stoploss:** {result_json.get('trade_plan').get('stoploss_price', '')}")
+
+
             else:
+                indicator_explanation = result_json.get('indicator_explanation_english', '')
+                st.success(f"{indicator_explanation}")
                 st.success(f"{result_json.get('final_recommendation_english','')}")
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.info(f"**Strategy:** {result_json.get('trade_plan').get('strategy', '')}")
+                with col2:
+                    st.info(f"**Entry Price:** {result_json.get('trade_plan').get('entry_price', '')}")
+                with col3:
+                    st.info(f"**Target Price:** {result_json.get('trade_plan').get('target_price', '')}")
+                with col4:
+                    st.info(f"**Stoploss:** {result_json.get('trade_plan').get('stoploss_price', '')}")
 
 def text_to_speech(text, lang):
     tts = gTTS(text=text, lang=lang)

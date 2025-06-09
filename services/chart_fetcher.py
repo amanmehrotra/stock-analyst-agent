@@ -82,6 +82,33 @@ class ChartService:
         if "CCI" in indicators:
             df["CCI"] = ta.cci(high=high, low=low, close=close, length=20)
 
+        if "ATR" in indicators:
+            df["ATR"] = ta.atr(high=high, low=low, close=close, length=14)
+
+        avg_vol = volume.rolling(window=10).mean()
+        df["vol_surge"] = volume > 1.5 * avg_vol
+
+        # Recent swing high/low (use last N bars)
+        if "swing_high_30" in indicators:
+            df["swing_high_30"] = high.rolling(window=30).max()
+            df["swing_low_30"] = low.rolling(window=30).min()
+
+        if "swing_high_50" in indicators:
+            df["swing_high_50"] = high.rolling(window=50).max()
+            df["swing_low_50"] = low.rolling(window=50).min()
+
+        if "swing_high_60" in indicators:
+            df["swing_high_60"] = high.rolling(window=60).max()
+            df["swing_low_60"] = low.rolling(window=60).min()
+
+        if "swing_high_75" in indicators:
+            df["swing_high_75"] = high.rolling(window=75).max()
+            df["swing_low_75"] = low.rolling(window=75).min()
+
+        if "swing_high_90" in indicators:
+            df["swing_high_90"] = high.rolling(window=90).max()
+            df["swing_low_90"] = low.rolling(window=90).min()
+
         return df
 
     # def get_indicators(self, df):
@@ -129,18 +156,30 @@ class ChartService:
             "bollinger_high_band": safe("bollinger_hband"),
             "bollinger_low_band": safe("bollinger_lband"),
             "ADX": safe("ADX"),
-            "CCI": safe("CCI")
+            "CCI": safe("CCI"),
+            "ATR": safe("ATR"),
+            "vol_surge": int(latest["vol_surge"].iloc[-1]) if latest["vol_surge"].iloc[-1] is not None else None,  # Boolean, convert to 1 or 0 if needed
+            "swing_high_30": safe("swing_high_30"),
+            "swing_low_30": safe("swing_low_30"),
+            "swing_high_60": safe("swing_high_60"),
+            "swing_low_60": safe("swing_low_60"),
+            "swing_high_50": safe("swing_high_50"),
+            "swing_low_50": safe("swing_low_50"),
+            "swing_high_75": safe("swing_high_75"),
+            "swing_low_75": safe("swing_low_75"),
+            "swing_high_90": safe("swing_high_90"),
+            "swing_low_90": safe("swing_low_90")
         }
 
         # Filter out indicators that are None
         indicators = {k: v for k, v in raw_indicators.items() if v is not None}
-
+        print(indicators)
         return indicators
 
 def get_period_interval_string(trading_type: str):
     mapping = {
-        "Intraday":       {"period": "1d",  "interval": "5m",  "period_string": "1 Day"},
-        "1-3 Days":       {"period": "5d",  "interval": "15m", "period_string": "5 Days"},
+        "Intraday":       {"period": "5d",  "interval": "5m",  "period_string": "5 Days"},
+        "1-3 Days":       {"period": "7d",  "interval": "15m", "period_string": "7 Days"},
         "1-2 Weeks":      {"period": "14d", "interval": "30m", "period_string": "14 Days"},
         "2-4 Weeks":      {"period": "1mo", "interval": "1h",  "period_string": "1 Month"},
         "1-3 Months":     {"period": "3mo", "interval": "1d",  "period_string": "3 Months"},
@@ -150,14 +189,26 @@ def get_period_interval_string(trading_type: str):
     return mapping.get(trading_type, {"period": None, "interval": None, "period_string": "Unknown"})
 
 def get_active_indicators(trading_type):
-    # if trading_type == "Intraday":
-    #     return ["EMA_20", "RSI", "OBV", "Bollinger"]
-    # elif trading_type == "1-3 Days":
-    #     return ["EMA_20", "EMA_50", "RSI", "OBV", "Bollinger", "MACD"]
-    # elif trading_type in ["1-2 Weeks", "2-4 Weeks"]:
-    #     return ["EMA_20", "EMA_50", "RSI", "MACD", "OBV", "Bollinger", "ADX"]
-    # elif trading_type in ["1-3 Months", "3-6 Months"]:
-    #     return ["EMA_20", "EMA_50", "RSI", "MACD", "OBV", "Bollinger", "ADX", "CCI"]
-    # else:
-    #     return ["EMA_20", "RSI"]
-    return ["EMA_20", "EMA_50", "RSI", "MACD", "OBV", "Bollinger", "ADX", "CCI"]
+    base = ["RSI", "OBV", "Bollinger", "vol_surge"]
+
+    if trading_type == "Intraday":
+        return base + [ "swing_high_30", "swing_low_30"] # exclude EMA_50, MACD, ADX, CCI — not reliable at 5m
+
+    elif trading_type == "1-3 Days":
+        return base + ["EMA_20", "EMA_50", "MACD"] + ["swing_high_30", "swing_low_30"]  # avoid ADX, CCI due to short horizon
+
+    elif trading_type == "1-2 Weeks":
+        return base + ["EMA_20", "EMA_50", "MACD", "ADX", "ATR"] + ["swing_high_50", "swing_low_50"]
+
+    elif trading_type == "2-4 Weeks":
+        return base + ["EMA_20", "EMA_50", "MACD", "ADX", "ATR"] + ["swing_high_75", "swing_low_75"]
+
+    elif trading_type == "1-3 Months":
+        return base + ["EMA_20", "EMA_50", "MACD", "ADX", "CCI", "ATR"] + ["swing_high_60", "swing_low_60"]
+
+    elif trading_type == "3-6 Months":
+        return base + ["EMA_20", "EMA_50", "MACD", "ADX", "CCI", "ATR"] + ["swing_high_90", "swing_low_90"]
+
+    else:
+        return base
+    # return ["EMA_20", "EMA_50", "RSI", "MACD", "OBV", "Bollinger", "ADX", "CCI"]
