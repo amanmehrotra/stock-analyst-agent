@@ -132,7 +132,7 @@ Important: **Do NOT include ```json or ``` in the output. Just return raw parsab
 - If you return anything else, it will cause a system error.
 """
 
-PROMPT = """
+PROMPT_OLD2 = """
 You are a professional stock market analyst.
 
 Analyze the following for the stock: {stock_name}
@@ -254,6 +254,136 @@ Important: **Do NOT include ```json or ``` in the output. Just return raw parsab
   "final_recommendation_english": "...",
   "trade_plan": {{
     "strategy": "Buy/Sell/Avoid",
+    "entry_price": "₹xxx.xx",
+    "target_price": "₹xxx.xx",
+    "stoploss_price": "₹xxx.xx"
+  }}
+}}
+
+⚠️ VERY IMPORTANT:
+- Respond only with valid JSON.
+- Include ALL fields shown above. Do not miss any field.
+- Use only the exact field names shown.
+- Every opening brace must have a matching closing brace.
+- Ensure all strings use double quotes `"` and key-value pairs are separated by commas.
+- Do NOT include any explanation, introduction, or code block formatting.
+- Do NOT include ```json or ``` anywhere in the output.
+- Return **only raw JSON**. No surrounding text, no formatting, just JSON.
+- If you return anything else, it will cause a system error.
+"""
+
+PROMPT= """
+You are a professional stock market analyst.
+
+Analyze the following for the stock: {stock_name}
+
+This analysis is specifically for Intraday trading.
+
+You are provided with:
+
+1. News articles (JSON list):
+{news_json}
+
+Each item includes:
+- `id`
+- `title`: in English
+- `summary`: in English
+- `publishedAt`
+- `link`
+- `source`
+
+2. Chart indicators (JSON object). 
+
+{indicators_json}
+includes:
+- close price
+- VWAP
+- RSI
+- MACD
+- MACD Signal
+- EMA 20
+- EMA 50
+- ATR (14)
+- Volume
+- Volume Spike (1/0)
+- Last Candle High
+- Last Candle Low
+- 30-Candle Swing High
+- 30-Candle Swing Low
+
+---
+
+### Your tasks:
+
+#### 1. News Relevance & Sentiment:
+- If no news is available, return an empty list for the `combined_news`.
+
+For each news item:
+- Check if the news is **actually about the stock** {stock_name}. Use `title` and `summary`.
+  - Output field: `is_related_to_stock`: "yes" or "no"
+- If `is_related_to_stock` is "yes", determine its **sentiment**:
+  - Options: positive / negative / neutral
+  - Think like an intraday trader:
+    - Would this news make investors want to buy, sell, or stay neutral?
+    - Stake sales by big investors (SoftBank, promoters) are **negative** if sold below market price or signal lack of confidence.
+    - Neutral is valid **only if the news has no direct market implication**.
+  - Base sentiment on potential market impact — not just tone.
+
+---
+
+#### 2. Technical Indicator Explanation:
+You must explain each indicator present in `indicators_json` using **beginner-friendly, step-by-step language**.
+
+Now, explain **each available indicator**:
+- Start with the definition above (in simple words).
+- Then interpret the current value based on Intraday trading.
+- Example: “The EMA_20 is above the current price, suggesting short-term weakness.”
+
+Format this as a natural paragraph in English and place it inside:
+- `indicator_explanation_english`
+
+---
+
+#### 3. Final Trading Recommendation (for Intraday only):
+Based on your news sentiment and indicators analysis, provide a **clear trading call**:
+
+- `strategy`: Buy / Sell / WAIT
+- `entry_price`
+- `target_price`: Logical target based on momentum, trend, and resistance
+- `stoploss_price`: Based on swing low/high or ATR
+        
+Explain your reasoning inside `final_recommendation_english`:
+- Step-by-step logic:
+  - Is trend positive/negative/neutral?
+  - Is momentum rising or falling?
+  - Are investors excited (volume surge, positive sentiment) or cautious?
+  - Link it clearly to the stock and intraday timeframe
+- Write like you're explaining it to a beginner trader.
+- Use VWAP and Swing High/Low to assess breakout/breakdown. Check MACD crossover, RSI momentum, and EMA alignment for trend confirmation. Set SL/Target using ATR or structure zones.
+
+Respond strictly in this **structured JSON format**:
+Important: **Do NOT include ```json or ``` in the output. Just return raw parsable JSON only.**
+
+```json
+{{
+  "combined_news": [
+    {{
+      "id": 1,
+      "title_english": "Tata Motors reports 23% rise in quarterly profit",
+      "is_related_to_stock": "yes/no",
+      "sentiment_english": "positive"
+    }},
+    {{
+      "id": 2,
+      "title_english": "Tata Motors reports 23% rise in quarterly profit",
+      "is_related_to_stock": "yes/no",
+      "sentiment_english": "positive"
+    }}
+  ],
+  "indicator_explanation_english": "...",
+  "final_recommendation_english": "...",
+  "trade_plan": {{
+    "strategy": "Buy/Sell/WAIT",
     "entry_price": "₹xxx.xx",
     "target_price": "₹xxx.xx",
     "stoploss_price": "₹xxx.xx"

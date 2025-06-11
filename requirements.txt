@@ -17,3 +17,4 @@ pydantic~=2.11.4
 groq
 pyyaml
 gtts
+ta

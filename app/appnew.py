@@ -49,11 +49,16 @@ def start():
          "NBCC", "IRCON", "Reliance", "Renuka", "RAILTEL", "LIC"]
     )
 
+    # trading_type = st.sidebar.selectbox(
+    #     "Select Trading Type",
+    #     ["Intraday", "1-3 Days", "1-2 Weeks", "2-4 Weeks","1-3 Months","3-6 Months"],
+    #     index=0
+    # )
     trading_type = st.sidebar.selectbox(
-        "Select Trading Type",
-        ["Intraday", "1-3 Days", "1-2 Weeks", "2-4 Weeks","1-3 Months","3-6 Months"],
-        index=0
-    )
+            "Select Trading Type",
+            ["Intraday"],
+            index=0
+        )
 
     language = st.sidebar.radio("Choose Language", ["hindi","english"], horizontal=True)
 

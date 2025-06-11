@@ -21,8 +21,8 @@ class LLMService:
         self.llm =  ChatOpenAI(
             model=llm_model,
             base_url=self.url,
-            api_key=llm_key,
-            temperature=model_temperature)
+            api_key=llm_key)
+            # temperature=model_temperature)
         self.client = Groq(api_key=llm_key)
 
         self.llm = self.llm.bind(response_format={"type": "json_object"})
@@ -41,8 +41,7 @@ class LLMService:
         try:
             feedback = chain.invoke({"stock_name": stock_name,
                                      "news_json": news,
-                                     "indicators_json": indicators,
-                                     "trading_type": trading_type})
+                                     "indicators_json": indicators})
 
             print(f"llm analysis content:{feedback}\n")
             return json.loads(feedback.content)
