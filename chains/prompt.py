@@ -301,6 +301,8 @@ includes:
 - RSI
 - MACD
 - MACD Signal
+- Bollinger High band
+- Bollinger low band
 - EMA 20
 - EMA 50
 - ATR (14)

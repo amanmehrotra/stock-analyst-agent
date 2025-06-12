@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # import pandas_ta as ta
 from ta.momentum import RSIIndicator
 from ta.trend import MACD, EMAIndicator
-from ta.volatility import AverageTrueRange
+from ta.volatility import AverageTrueRange, BollingerBands
 from numpy.ma.core import append
 
 from utils.ticker import tickers
@@ -43,6 +43,7 @@ class ChartService:
 
     def calculate_technical_indicators(self, df):
         # Calculate indicators
+        print(f"length: {len(df)}")
         indicators = get_active_indicators(self.trading_type)
         close = df["Close"][self.ticker]
         high = df["High"][self.ticker]
@@ -53,16 +54,16 @@ class ChartService:
         if "VWAP" in indicators:
             df['vwap'] = (close * volume).cumsum() / volume.cumsum()
 
-        if "EMA_20" in indicators:
+        if "EMA_20" in indicators and len(df)>=20:
             df["EMA_20"] = EMAIndicator(close, window=20).ema_indicator()
 
-        if "EMA_50" in indicators:
+        if "EMA_50" in indicators and len(df)>=50:
             df["EMA_50"] = EMAIndicator(close, window=50).ema_indicator()
 
         # df["SMA_20"] = ta.sma(df["Close"][self.ticker], length=20)
         # df["SMA_50"] = ta.sma(df["Close"][self.ticker], length=50)
 
-        if "RSI" in indicators:
+        if "RSI" in indicators and len(df)>=14:
             df["RSI"] = RSIIndicator(close, window=14).rsi()
 
         if "MACD" in indicators:
@@ -74,12 +75,12 @@ class ChartService:
         # if "OBV" in indicators:
         #     df["OBV"] = ta.obv(close, volume)
 
-        # if "Bollinger" in indicators:
-        #     bb = ta.bbands(close, length=20)
-        #
-        #     if bb is not None:
-        #         df["bollinger_hband"] = bb["BBU_20_2.0"]
-        #         df["bollinger_lband"] = bb["BBL_20_2.0"]
+        if "Bollinger" in indicators and len(df)>=20:
+            bb = BollingerBands(close, window=20)
+
+            if bb is not None:
+                df["bollinger_hband"] = bb.bollinger_hband()
+                df["bollinger_lband"] = bb.bollinger_lband()
 
         # if "ADX" in indicators:
         #     adx = ta.adx(high=high, low=low, close=close)
@@ -89,15 +90,16 @@ class ChartService:
         # if "CCI" in indicators:
         #     df["CCI"] = ta.cci(high=high, low=low, close=close, length=20)
 
-        if "ATR" in indicators:
+        if "ATR" in indicators and len(df)>=14:
             df["ATR"] = AverageTrueRange(high=high, low=low, close=close, window=14).average_true_range()
 
-        avg_vol = volume.rolling(window=20).mean()
-        df['volume_avg'] = avg_vol
-        df["vol_surge"] = volume > 1.5 * avg_vol
+        if(len(df>=20)):
+            avg_vol = volume.rolling(window=20).mean()
+            df['volume_avg'] = avg_vol
+            df["vol_surge"] = volume > 1.5 * avg_vol
 
         # Recent swing high/low (use last N bars)
-        if "swing_high_30" in indicators:
+        if "swing_high_30" in indicators and len(df)>=30:
             df["swing_high_30"] = high.rolling(window=30).max()
             df["swing_low_30"] = low.rolling(window=30).min()
 
@@ -146,8 +148,15 @@ class ChartService:
     #     return indicators
 
     def get_indicators(self, df):
-        latest = df.dropna().iloc[-1]
-        previous = df.dropna().iloc[-2]
+        print(df)
+        # clean_df = df.dropna()
+        clean_df = df.copy()
+        if not clean_df.empty:
+            latest = clean_df.iloc[-1]
+            previous = clean_df.iloc[-2]
+        else:
+            latest = None
+            previous = None
 
 
         def safe(name):
@@ -165,8 +174,8 @@ class ChartService:
             "MACD": safe("MACD"),
             "MACD_signal": safe("MACD_signal"),
             # "OBV": safe("OBV"),
-            # "bollinger_high_band": safe("bollinger_hband"),
-            # "bollinger_low_band": safe("bollinger_lband"),
+            "bollinger_high_band": safe("bollinger_hband"),
+            "bollinger_low_band": safe("bollinger_lband"),
             # "ADX": safe("ADX"),
             # "CCI": safe("CCI"),
             "ATR": safe("ATR"),
@@ -193,7 +202,7 @@ class ChartService:
 
 def get_period_interval_string(trading_type: str):
     mapping = {
-        "Intraday":       {"period": "1d",  "interval": "1m",  "period_string": "1 Day"},
+        "Intraday":       {"period": "1d",  "interval": "5m",  "period_string": "1 Day"},
         "1-3 Days":       {"period": "7d",  "interval": "15m", "period_string": "7 Days"},
         "1-2 Weeks":      {"period": "14d", "interval": "30m", "period_string": "14 Days"},
         "2-4 Weeks":      {"period": "1mo", "interval": "1h",  "period_string": "1 Month"},
@@ -204,7 +213,7 @@ def get_period_interval_string(trading_type: str):
     return mapping.get(trading_type, {"period": None, "interval": None, "period_string": "Unknown"})
 
 def get_active_indicators(trading_type):
-    base = ["RSI", "MACD", "ATR", "vol_surge", "EMA_20", "EMA_50", "VWAP"]
+    base = ["RSI", "MACD", "ATR", "vol_surge", "EMA_20", "EMA_50", "VWAP", "Bollinger"]
 
     if trading_type == "Intraday":
         return base + [ "swing_high_30", "swing_low_30"] # exclude EMA_50, MACD, ADX, CCI — not reliable at 5m
