@@ -193,7 +193,7 @@ class ChartService:
 
 def get_period_interval_string(trading_type: str):
     mapping = {
-        "Intraday":       {"period": "1d",  "interval": "5m",  "period_string": "1 Day"},
+        "Intraday":       {"period": "1d",  "interval": "1m",  "period_string": "1 Day"},
         "1-3 Days":       {"period": "7d",  "interval": "15m", "period_string": "7 Days"},
         "1-2 Weeks":      {"period": "14d", "interval": "30m", "period_string": "14 Days"},
         "2-4 Weeks":      {"period": "1mo", "interval": "1h",  "period_string": "1 Month"},
