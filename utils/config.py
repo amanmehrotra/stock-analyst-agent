@@ -25,7 +25,7 @@ ET_FEEDS = {
 llm_baseurl = "https://api.groq.com/openai/v1"
 llm_key = st.secrets["GROQ_API_KEY"]
 #llm_model = "llama3-70b-8192"
-llm_model="compound-beta"
+llm_model="llama3-70b-8192"
 # google translation API
 google_translate_url = "https://translate-pa.googleapis.com/v1/translateHtml"
 translation_key = st.secrets["TRANSLATION_API_KEY"]
