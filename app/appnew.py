@@ -103,7 +103,7 @@ def start():
         result_json_hindi = st.session_state.result_json_hindi
         st.subheader(f"Analysis for: {result['stock_name']}")
         # tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
-        tab1 = st.tabs(["📰 News"])
+        tab1, = st.tabs(["📰 News"])
         # with tab2:
         #     st.markdown("### Chart Indicators")
         #     indicator_explanation = result_json.get('indicator_explanation_english','')

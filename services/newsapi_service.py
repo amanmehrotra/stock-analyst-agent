@@ -18,8 +18,8 @@ class NewsApiService:
             "Accept": "*/*",}
             # Fetch the RSS feed with custom headers
             response = requests.get(url, headers=headers)
-            print(url)
-            print("\n")
+            # print(url)
+            # print("\n")
             if response.status_code == 200:
                 # Parse the RSS feed
                 feed = feedparser.parse(response.text)
