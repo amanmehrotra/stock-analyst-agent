@@ -40,11 +40,11 @@ def initiate_translation(request):
         news_item['summary'] = translate(news_item['summary'])
         news_item['sentiment'] = translate(news_item['sentiment'])
 
-    # Translate indicator_explanation
-    request["indicator_explanation"] = translate(request.get("indicator_explanation", ""))
-
-    # Translate final_recommendation
-    request["final_recommendation"] = translate(request.get("final_recommendation", ""))
+    # # Translate indicator_explanation
+    # request["indicator_explanation"] = translate(request.get("indicator_explanation", ""))
+    #
+    # # Translate final_recommendation
+    # request["final_recommendation"] = translate(request.get("final_recommendation", ""))
 
     # Output the modified data
     # print("\n=== Final Translated Data ===")

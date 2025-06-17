@@ -403,3 +403,73 @@ Important: **Do NOT include ```json or ``` in the output. Just return raw parsab
 - Return **only raw JSON**. No surrounding text, no formatting, just JSON.
 - If you return anything else, it will cause a system error.
 """
+
+PROMPT_NEWS = """
+You are a professional stock market news analyst.
+
+Analyze the following for the stock: {stock_name}
+This analysis is specifically for Intraday trading.
+
+You are provided with:
+
+1. News articles (JSON list):
+{news_json}
+
+Each item includes:
+- `id`
+- `title`: in English
+- `summary`: in English
+- `publishedAt`
+- `link`
+- `source`
+---
+
+### Your tasks:
+
+#### 1. News Relevance & Sentiment:
+- If no news is available, return an empty list for the `combined_news`.
+
+For each news item:
+- Check if the news is **actually about the stock** {stock_name}. Use `title` and `summary`.
+  - Output field: `is_related_to_stock`: "yes" or "no"
+- If `is_related_to_stock` is "yes", determine its **sentiment**:
+  - Options: positive / negative / neutral
+  - Think like an intraday trader news analyst:
+    - Would this news make investors want to buy, sell, or stay neutral?
+    - Neutral is valid **only if the news has no direct market implication**.
+  - Base news sentiment on potential market impact — not just tone.
+
+---
+
+Respond strictly in this **structured JSON format**:
+Important: **Do NOT include ```json or ``` in the output. Just return raw parsable JSON only.**
+
+```json
+{{
+  "combined_news": [
+    {{
+      "id": 1,
+      "title_english": "Tata Motors reports 23% rise in quarterly profit",
+      "is_related_to_stock": "yes/no",
+      "sentiment_english": "positive"
+    }},
+    {{
+      "id": 2,
+      "title_english": "Tata Motors reports 23% rise in quarterly profit",
+      "is_related_to_stock": "yes/no",
+      "sentiment_english": "positive"
+    }}
+  ]
+}}
+
+⚠️ VERY IMPORTANT:
+- Respond only with valid JSON.
+- Include ALL fields shown above. Do not miss any field.
+- Use only the exact field names shown.
+- Every opening brace must have a matching closing brace.
+- Ensure all strings use double quotes `"` and key-value pairs are separated by commas.
+- Do NOT include any explanation, introduction, or code block formatting.
+- Do NOT include ```json or ``` anywhere in the output.
+- Return **only raw JSON**. No surrounding text, no formatting, just JSON.
+- If you return anything else, it will cause a system error.
+"""

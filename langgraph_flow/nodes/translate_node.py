@@ -10,14 +10,14 @@ from services import translator_service
 class TranslateRequest:
     def __init__(self):
         self.news = []
-        self.indicator_explanation:str = ''
-        self.final_recommendation:str = ''
+        # self.indicator_explanation:str = ''
+        # self.final_recommendation:str = ''
 
     def to_dict(self):
         return {
             "news": self.news,
-            "indicator_explanation": self.indicator_explanation,
-            "final_recommendation": self.final_recommendation
+            # "indicator_explanation": self.indicator_explanation,
+            # "final_recommendation": self.final_recommendation
         }
 
 def translate_node(state):
@@ -44,8 +44,8 @@ def translate_node(state):
     translate_request = TranslateRequest()
     translate_request.news = news
 
-    translate_request.indicator_explanation = state["analysis"].get("indicator_explanation_english",'')
-    translate_request.final_recommendation = state["analysis"].get('final_recommendation_english','')
+    # translate_request.indicator_explanation = state["analysis"].get("indicator_explanation_english",'')
+    # translate_request.final_recommendation = state["analysis"].get('final_recommendation_english','')
     # print(full_news_list)
     # translate_request_yaml = yaml.dump(translate_request.to_dict(), sort_keys=False, allow_unicode=True)
     # translate_request_json = json.dumps(translate_request.to_dict())

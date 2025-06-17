@@ -73,7 +73,7 @@ def start():
     if analyze_button:
         st.session_state.result_json = None
 
-        with st.spinner("Fetching Stock news, chart indicators and analysis in progress..."):
+        with st.spinner("Fetching Stock news..."):
 
             result = run_graph(stock_name, trading_type)
             result_json = result.get('analysis', None)
@@ -102,48 +102,49 @@ def start():
         result = st.session_state.result
         result_json_hindi = st.session_state.result_json_hindi
         st.subheader(f"Analysis for: {result['stock_name']}")
-        tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
-        with tab2:
-            st.markdown("### Chart Indicators")
-            indicator_explanation = result_json.get('indicator_explanation_english','')
-            indicators_org = result['indicators']
-            col1, col2 = st.columns([2, 1])
-            with col1:
-                if result['chart_buffer']:
-                    st.image(result['chart_buffer'], caption="📊 Stock Chart")
-            with col2:
-                col3, col4 = st.columns(2)
-                with col3:
-                    if "close_price" in indicators_org:
-                        st.metric("Close Price", f"₹{indicators_org['close_price']}")
-                    if "EMA_20" in indicators_org:
-                        st.metric("EMA 20", f"₹{indicators_org['EMA_20']}")
-                    if "EMA_50" in indicators_org:
-                        st.metric("EMA 50", f"₹{indicators_org['EMA_50']}")
-                    if "RSI" in indicators_org:
-                        st.metric("RSI", f"{indicators_org['RSI']}")
-                    if "OBV" in indicators_org:
-                        st.metric("OBV", f"{indicators_org['OBV']}")
-                    if "ADX" in indicators_org:
-                        st.metric("ADX", f"{indicators_org['ADX']}")
-
-                with col4:
-                    if "MACD" in indicators_org:
-                        st.metric("MACD", f"{indicators_org['MACD']}")
-                    if "MACD_signal" in indicators_org:
-                        st.metric("MACD Signal", f"{indicators_org['MACD_signal']}")
-                    if "bollinger_high_band" in indicators_org:
-                        st.metric("Bollinger High", f"₹{indicators_org['bollinger_high_band']}")
-                    if "bollinger_low_band" in indicators_org:
-                        st.metric("Bollinger Low", f"₹{indicators_org['bollinger_low_band']}")
-                    if "CCI" in indicators_org:
-                        st.metric("CCI", f"{indicators_org['CCI']}")
-            st.markdown("### Explanation")
-            if language == "hindi":
-                st.success(f"{result_json_hindi.get('indicator_explanation', '')}")
-
-            else:
-                st.success(f"{indicator_explanation}")
+        # tab1, tab2, tab3 = st.tabs(["📰 News", "📊 Chart Indicators", "📜 Final Recommendation"])
+        tab1 = st.tabs(["📰 News"])
+        # with tab2:
+        #     st.markdown("### Chart Indicators")
+        #     indicator_explanation = result_json.get('indicator_explanation_english','')
+        #     indicators_org = result['indicators']
+        #     col1, col2 = st.columns([2, 1])
+        #     with col1:
+        #         if result['chart_buffer']:
+        #             st.image(result['chart_buffer'], caption="📊 Stock Chart")
+        #     with col2:
+        #         col3, col4 = st.columns(2)
+        #         with col3:
+        #             if "close_price" in indicators_org:
+        #                 st.metric("Close Price", f"₹{indicators_org['close_price']}")
+        #             if "EMA_20" in indicators_org:
+        #                 st.metric("EMA 20", f"₹{indicators_org['EMA_20']}")
+        #             if "EMA_50" in indicators_org:
+        #                 st.metric("EMA 50", f"₹{indicators_org['EMA_50']}")
+        #             if "RSI" in indicators_org:
+        #                 st.metric("RSI", f"{indicators_org['RSI']}")
+        #             if "OBV" in indicators_org:
+        #                 st.metric("OBV", f"{indicators_org['OBV']}")
+        #             if "ADX" in indicators_org:
+        #                 st.metric("ADX", f"{indicators_org['ADX']}")
+        #
+        #         with col4:
+        #             if "MACD" in indicators_org:
+        #                 st.metric("MACD", f"{indicators_org['MACD']}")
+        #             if "MACD_signal" in indicators_org:
+        #                 st.metric("MACD Signal", f"{indicators_org['MACD_signal']}")
+        #             if "bollinger_high_band" in indicators_org:
+        #                 st.metric("Bollinger High", f"₹{indicators_org['bollinger_high_band']}")
+        #             if "bollinger_low_band" in indicators_org:
+        #                 st.metric("Bollinger Low", f"₹{indicators_org['bollinger_low_band']}")
+        #             if "CCI" in indicators_org:
+        #                 st.metric("CCI", f"{indicators_org['CCI']}")
+        #     st.markdown("### Explanation")
+        #     if language == "hindi":
+        #         st.success(f"{result_json_hindi.get('indicator_explanation', '')}")
+        #
+        #     else:
+        #         st.success(f"{indicator_explanation}")
         with tab1:
             st.markdown("### Latest News")
             n = result_json_hindi['news']
@@ -181,38 +182,38 @@ def start():
                             st.markdown(f"🔗 [Read article]({i['link']})")
                             dt = datetime.strptime(i['publishedAt'], "%Y-%m-%d %H:%M:%S")
                             st.markdown(f"🕒 Published on {dt.strftime("%b %d, %Y, %I:%M %p")}")
-        with tab3:
-            # Final Suggestion
-            st.markdown("### Recommendation (AI-based)")
-            if language == "hindi":
-                st.success(f"{result_json_hindi.get('indicator_explanation', '')}")
-                recommendation = result_json_hindi.get('final_recommendation','')
-                st.success(f"{recommendation}")
-                # st.markdown("Final Recommendation:-")
-                col1, col2, col3, col4 = st.columns(4)
-                with col1:
-                    st.info(f"**Strategy:** {result_json.get('trade_plan').get('strategy','')}")
-                with col2:
-                    st.info(f"**Entry Price:** {result_json.get('trade_plan').get('entry_price', '')}")
-                with col3:
-                    st.info(f"**Target Price:** {result_json.get('trade_plan').get('target_price', '')}")
-                with col4:
-                    st.info(f"**Stoploss:** {result_json.get('trade_plan').get('stoploss_price', '')}")
-
-
-            else:
-                indicator_explanation = result_json.get('indicator_explanation_english', '')
-                st.success(f"{indicator_explanation}")
-                st.success(f"{result_json.get('final_recommendation_english','')}")
-                col1, col2, col3, col4 = st.columns(4)
-                with col1:
-                    st.info(f"**Strategy:** {result_json.get('trade_plan').get('strategy', '')}")
-                with col2:
-                    st.info(f"**Entry Price:** {result_json.get('trade_plan').get('entry_price', '')}")
-                with col3:
-                    st.info(f"**Target Price:** {result_json.get('trade_plan').get('target_price', '')}")
-                with col4:
-                    st.info(f"**Stoploss:** {result_json.get('trade_plan').get('stoploss_price', '')}")
+        # with tab3:
+        #     # Final Suggestion
+        #     st.markdown("### Recommendation (AI-based)")
+        #     if language == "hindi":
+        #         st.success(f"{result_json_hindi.get('indicator_explanation', '')}")
+        #         recommendation = result_json_hindi.get('final_recommendation','')
+        #         st.success(f"{recommendation}")
+        #         # st.markdown("Final Recommendation:-")
+        #         col1, col2, col3, col4 = st.columns(4)
+        #         with col1:
+        #             st.info(f"**Strategy:** {result_json.get('trade_plan').get('strategy','')}")
+        #         with col2:
+        #             st.info(f"**Entry Price:** {result_json.get('trade_plan').get('entry_price', '')}")
+        #         with col3:
+        #             st.info(f"**Target Price:** {result_json.get('trade_plan').get('target_price', '')}")
+        #         with col4:
+        #             st.info(f"**Stoploss:** {result_json.get('trade_plan').get('stoploss_price', '')}")
+        #
+        #
+        #     else:
+        #         indicator_explanation = result_json.get('indicator_explanation_english', '')
+        #         st.success(f"{indicator_explanation}")
+        #         st.success(f"{result_json.get('final_recommendation_english','')}")
+        #         col1, col2, col3, col4 = st.columns(4)
+        #         with col1:
+        #             st.info(f"**Strategy:** {result_json.get('trade_plan').get('strategy', '')}")
+        #         with col2:
+        #             st.info(f"**Entry Price:** {result_json.get('trade_plan').get('entry_price', '')}")
+        #         with col3:
+        #             st.info(f"**Target Price:** {result_json.get('trade_plan').get('target_price', '')}")
+        #         with col4:
+        #             st.info(f"**Stoploss:** {result_json.get('trade_plan').get('stoploss_price', '')}")
 
 def text_to_speech(text, lang):
     tts = gTTS(text=text, lang=lang)

@@ -27,8 +27,9 @@ def run_graph(stock_name, trading_type):
 
     builder.set_entry_point("input")
     builder.add_edge("input", "fetch_news")
-    builder.add_edge("fetch_news", "fetch_chart")
-    builder.add_edge("fetch_chart", "analyze")
+    # builder.add_edge("fetch_news", "fetch_chart")
+    # builder.add_edge("fetch_chart", "analyze")
+    builder.add_edge("fetch_news", "analyze")
     builder.add_edge("analyze", "translate")
     builder.add_edge("translate", END)
 

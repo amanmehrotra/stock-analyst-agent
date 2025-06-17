@@ -6,7 +6,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
 from chains.llm_response import StockAnalysisOutput
-from chains.prompt import PROMPT
+from chains.prompt import PROMPT, PROMPT_NEWS
 from utils.config import llm_baseurl, llm_key, llm_model
 
 
@@ -27,12 +27,12 @@ class LLMService:
 
         self.llm = self.llm.bind(response_format={"type": "json_object"})
 
-    def analyze_news_and_chart(self, stock_name, news, indicators, trading_type):
+    def analyze_news_and_chart(self, stock_name, news, trading_type):
 
         # Set up the parser with the output schema
         parser = PydanticOutputParser(pydantic_object=StockAnalysisOutput)
 
-        prompt = PromptTemplate.from_template(PROMPT)
+        prompt = PromptTemplate.from_template(PROMPT_NEWS)
         format_instructions = parser.get_format_instructions()
         # print(format_instructions)
         chain = prompt | self.llm
@@ -41,7 +41,7 @@ class LLMService:
         try:
             feedback = chain.invoke({"stock_name": stock_name,
                                      "news_json": news,
-                                     "indicators_json": indicators})
+                                    })
 
             print(f"llm analysis content:{feedback}\n")
             return json.loads(feedback.content)
